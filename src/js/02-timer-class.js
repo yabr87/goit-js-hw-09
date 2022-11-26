@@ -19,7 +19,9 @@ const options = {
   onClose(selectedDates) {
     userselectedDates = selectedDates[0].getTime();
     if (userselectedDates < Date.now()) {
-      Notify.failure('Please choose a date in the future');
+      Notify.failure('Please choose a date in the future', {
+        position: 'center-top',
+      });
       return;
     }
     startBtn.disabled = false;
@@ -59,7 +61,9 @@ class Timer {
         this.stop();
         input.disabled = false;
         startBtn.disabled = true;
-        Notify.info('Time is up');
+        Notify.info('Time is up', {
+          position: 'center-top',
+        });
         return;
       }
       let deltaTime = userselectedDates - currentTime;
