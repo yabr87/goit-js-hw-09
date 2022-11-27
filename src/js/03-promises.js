@@ -46,4 +46,5 @@ function onFormSubmit(event) {
       });
     deley += step;
   }
+  event.currentTarget.reset();
 }
