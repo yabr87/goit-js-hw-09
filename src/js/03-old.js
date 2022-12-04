@@ -4,15 +4,15 @@ const form = document.querySelector('.form');
 
 form.addEventListener('submit', onFormSubmit);
 
-function createPromise(delay) {
+function createPromise(position, delay) {
   const shouldResolve = Math.random() > 0.3;
 
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (shouldResolve) {
-        resolve(delay);
+        resolve({ position, delay });
       } else {
-        reject(delay);
+        reject({ position, delay });
       }
     }, delay);
   });
@@ -20,27 +20,29 @@ function createPromise(delay) {
 
 function onFormSubmit(event) {
   event.preventDefault();
-  let delay = Number(form.elements.delay.value);
+  let deley = Number(form.elements.delay.value);
   let step = Number(form.elements.step.value);
   let amount = Number(form.elements.amount.value);
 
-  if (delay < 0 || step < 0 || amount <= 0) {
-    alert('Зповніть вcі поля.');
+  if (deley < 0 || step < 0 || amount <= 0) {
+    alert('Будь ласка, заповніть поле.');
     return;
   }
   for (let position = 1; position <= amount; position++) {
-    createPromise(delay)
-      .then(delayStep => {
-        Notify.success(`✅ Fulfilled promise ${position} in ${delayStep}ms`, {
+    createPromise(position, deley)
+      .then(({ position, delay }) => {
+        Notify.success(`Fulfilled promise ${position} in ${delay}ms`, {
           useIcon: false,
         });
+        console.log(`Fulfilled promise ${position} in ${delay}ms`);
       })
-      .catch(delayStep => {
-        Notify.failure(`❌ Rejected promise ${position} in ${delayStep}ms`, {
+      .catch(({ position, delay }) => {
+        Notify.failure(`Rejected promise ${position} in ${delay}ms`, {
           useIcon: false,
         });
+        console.log(`Rejected promise ${position} in ${delay}ms`);
       });
-    delay += step;
+    deley += step;
   }
   event.currentTarget.reset();
 }
